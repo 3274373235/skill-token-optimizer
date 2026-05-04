@@ -48,7 +48,12 @@ class TokenAnalyzer:
             (r'非常|特别|十分|极其', "可删除冗余程度副词", 2),
             (r'重要的|关键的|核心', "可简化", 2),
         ]
-
+        additional_patterns = [
+            (r'重复了[一二三四五六七八九十\d]+次', "可删除重复计数说明", 3),
+            (r'也就是说[,，]', "可简化为'即'", 2),
+            (r'基于以上[所述分析讨论]*[,，]', "删除过渡短语", 4),
+            (r'为了更好地.*?[,，]', "删除目的状语", 5),
+        ]
         for p, s, cost in patterns:
             matches = re.findall(p, content)
             if matches:
