@@ -3,6 +3,7 @@
 
 import json
 import time
+import List, Dict, asdict
 from pathlib import Path
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -78,6 +79,10 @@ class TokenMonitor:
                 print(f"[{datetime.now().strftime('%H:%M:%S')}] 运行中...")
         except KeyboardInterrupt:
             print("停止监控")
+    def should_compress_aggressively(self) -> bool:
+    """剩余预算不足30%时建议激进压缩"""
+        day_usage = self._get_usage(timedelta(days=1))
+        return day_usage > 0.7 * self.daily_budget
 
 def main():
     import argparse
